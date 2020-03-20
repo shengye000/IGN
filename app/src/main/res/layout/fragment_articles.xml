@@ -9,6 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Article Fragment" />
+        android:id="@+id/articles_test"
+        android:scrollbars="vertical"/>
 
 </FrameLayout>
