@@ -3,7 +3,7 @@ package com.example.ign.api
 import com.google.gson.annotations.SerializedName
 
 data class IGNVideos (
-    @SerializedName("contentID")
+    @SerializedName("contentId")
     val contentID : String,
     @SerializedName("contentType")
     val contentType: String,
@@ -14,7 +14,7 @@ data class IGNVideos (
     @SerializedName("tags")
     val tags: List<String>,
     @SerializedName("assets")
-    val authors: List<Assets>
+    val assets: List<Assets>
 )
 
 data class MetaDataVideos (

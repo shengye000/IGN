@@ -1,6 +1,7 @@
 package com.example.ign
 
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
@@ -44,6 +45,8 @@ class ArticlesAdapter(private val viewModel: MainViewModel)
         fun bind(item: IGNArticles?) {
             if(item == null)
                 return
+
+            Log.d("id", item.contentID)
             date.text = item.metadata.publishDate
 
             title.text = item.metadata.headline
@@ -66,7 +69,7 @@ class ArticlesAdapter(private val viewModel: MainViewModel)
             description.setOnClickListener{
                 val context = itemView.context
                 val intent = Intent(context, WebsiteView::class.java)
-                intent.putExtra("URL", "https://www.ign.com/articles/" + item.metadata.slug)
+                intent.putExtra("URL", "https://www.ign.com/search?q=" + item.metadata.slug + "&page=0&count=10&filter=all&")
                 context.startActivity(intent)
             }
 
@@ -79,6 +82,7 @@ class ArticlesAdapter(private val viewModel: MainViewModel)
             }
 
             authorName.text = "By " + item.authors[0].authorName
+            authorName.paintFlags = Paint.UNDERLINE_TEXT_FLAG
             authorName.setOnClickListener {
                 val context = itemView.context
                 val intent = Intent(context, WebsiteView::class.java)
@@ -88,11 +92,14 @@ class ArticlesAdapter(private val viewModel: MainViewModel)
 
             game.text = item.metadata.objectName
             if(item.metadata.objectName != ""){
+                game.paintFlags = Paint.UNDERLINE_TEXT_FLAG
                 game.setOnClickListener {
                     val context = itemView.context
                     val intent = Intent(context, WebsiteView::class.java)
                     var name = item.metadata.objectName
-                    name = name.replace(" ", "-").replace(":", "").toLowerCase()
+                    val regex = Regex("[^a-zA-Z0-9_-]")
+                    name = name.replace(" ", "-")
+                    name = regex.replace(name, "").toLowerCase()
                     Log.d("name", name)
                     intent.putExtra("URL", "https://www.ign.com/games/" + name)
                     context.startActivity(intent)

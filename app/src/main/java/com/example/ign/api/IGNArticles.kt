@@ -3,7 +3,7 @@ package com.example.ign.api
 import com.google.gson.annotations.SerializedName
 
 data class IGNArticles (
-    @SerializedName("contentID")
+    @SerializedName("contentId")
     val contentID : String,
     @SerializedName("contentType")
     val contentType: String,
