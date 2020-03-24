@@ -3,9 +3,27 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <WebView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/web_view"
-        />
+        >
+
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/web_view"
+            />
+        <VideoView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:id="@+id/video_view"
+            android:scaleType="centerCrop"
+            />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/image_view"
+            />
+    </FrameLayout>
+
 </LinearLayout>

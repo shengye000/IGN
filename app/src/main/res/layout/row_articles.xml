@@ -90,8 +90,7 @@
                     android:id="@+id/articles_game"
                     android:padding="6dp"
                     android:textColor="@color/red"
-                    android:textStyle="bold"
-                    android:scrollbars = "vertical"
+                    android:singleLine="true"
                     />
                 <ImageView
                     android:layout_width="wrap_content"

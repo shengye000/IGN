@@ -67,35 +67,23 @@ class VideosAdapter(private val viewModel: MainViewModel)
 
             Glide.glideFetch(item.thumbnails[2].url, item.thumbnails[0].url, picture)
             picture.setOnClickListener {
-                val context = itemView.context
-                val intent = Intent(context, WebsiteView::class.java)
-                intent.putExtra("URL", "https://www.ign.com/videos/" + item.metadata.slug)
-                context.startActivity(intent)
+                newActivity(item.thumbnails[0].url, "picture")
             }
 
             button.setOnClickListener {
-                val context = itemView.context
-                val intent = Intent(context, WebsiteView::class.java)
-                intent.putExtra("URL", "https://www.ign.com/videos/" + item.metadata.slug)
-                context.startActivity(intent)
+                newActivity(item.assets[0].url, "MP4")
             }
 
             title.text = item.metadata.title
             title.setOnClickListener {
-                val context = itemView.context
-                val intent = Intent(context, WebsiteView::class.java)
-                intent.putExtra("URL", "https://www.ign.com/videos/" + item.metadata.slug)
-                context.startActivity(intent)
+                newActivity("https://www.ign.com/videos/" + item.metadata.slug, "link")
             }
 
             game.text = item.metadata.videoSeries.toUpperCase()
             if(item.metadata.videoSeries != "none"){
                 game.paintFlags = Paint.UNDERLINE_TEXT_FLAG
                 game.setOnClickListener {
-                    val context = itemView.context
-                    val intent = Intent(context, WebsiteView::class.java)
-                    intent.putExtra("URL", "https://www.ign.com/search?q=" + item.metadata.videoSeries + "&page=0&count=10&filter=all&")
-                    context.startActivity(intent)
+                    newActivity("https://www.ign.com/search?q=" + item.metadata.videoSeries + "&page=0&count=10&filter=all&", "link")
                 }
             }
             else{
@@ -103,6 +91,14 @@ class VideosAdapter(private val viewModel: MainViewModel)
             }
 
             comment.text = commentCount!!.count.toString()
+        }
+
+        private fun newActivity(url: String, type: String){
+            val context = itemView.context
+            val intent = Intent(context, WebsiteView::class.java)
+            intent.putExtra("URL", url)
+            intent.putExtra("type", type)
+            context.startActivity(intent)
         }
 
     }

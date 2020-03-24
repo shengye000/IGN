@@ -77,59 +77,48 @@ class ArticlesAdapter(private val viewModel: MainViewModel)
 
             title.text = item.metadata.headline
             title.setOnClickListener{
-                val context = itemView.context
-                val intent = Intent(context, WebsiteView::class.java)
-                intent.putExtra("URL", "https://www.ign.com/articles/" + item.metadata.slug)
-                context.startActivity(intent)
+                newActivity("https://www.ign.com/articles/" + item.metadata.slug, "link")
             }
 
             Glide.glideFetch(item.thumbnails[2].url, item.thumbnails[0].url, picture)
             picture.setOnClickListener{
-                val context = itemView.context
-                val intent = Intent(context, WebsiteView::class.java)
-                intent.putExtra("URL", "https://www.ign.com/articles/" + item.metadata.slug)
-                context.startActivity(intent)
+                newActivity(item.thumbnails[2].url, "picture")
             }
 
             description.text = item.metadata.description
             description.setOnClickListener{
-                val context = itemView.context
-                val intent = Intent(context, WebsiteView::class.java)
-                intent.putExtra("URL", "https://www.ign.com/articles/" + item.metadata.slug)
-                context.startActivity(intent)
+                newActivity("https://www.ign.com/articles/" + item.metadata.slug, "link")
             }
 
             Glide.glideFetch(item.authors[0].authorThumbNail, item.authors[0].authorThumbNail, authorImage)
             authorImage.setOnClickListener {
-                val context = itemView.context
-                val intent = Intent(context, WebsiteView::class.java)
-                intent.putExtra("URL", "https://www.ign.com/search?q=" + item.authors[0].authorName + "&page=0&count=10&filter=all&")
-                context.startActivity(intent)
+                newActivity(item.authors[0].authorThumbNail, "picture")
             }
 
             authorName.text = "By " + item.authors[0].authorName
             authorName.paintFlags = Paint.UNDERLINE_TEXT_FLAG
             authorName.setOnClickListener {
-                val context = itemView.context
-                val intent = Intent(context, WebsiteView::class.java)
-                intent.putExtra("URL", "https://www.ign.com/search?q=" + item.authors[0].authorName + "&page=0&count=10&filter=all&")
-                context.startActivity(intent)
+                newActivity("https://www.ign.com/search?q=" + item.authors[0].authorName + "&page=0&count=10&filter=all&", "link")
             }
 
             game.text = item.metadata.objectName.toUpperCase()
             if(item.metadata.objectName != ""){
                 game.paintFlags = Paint.UNDERLINE_TEXT_FLAG
                 game.setOnClickListener {
-                    val context = itemView.context
-                    val intent = Intent(context, WebsiteView::class.java)
-                    var name = item.metadata.objectName
-                    intent.putExtra("URL", "https://www.ign.com/search?q=" + name + "&page=0&count=10&filter=all&")
-                    context.startActivity(intent)
+                    newActivity("https://www.ign.com/search?q=" + item.metadata.objectName + "&page=0&count=10&filter=all&", "link")
                 }
             }
 
             comment.text = commentCount!!.count.toString()
             Log.d("number", commentCount.count.toString() + " " + commentCount.id)
+        }
+
+        private fun newActivity(url: String, type: String){
+            val context = itemView.context
+            val intent = Intent(context, WebsiteView::class.java)
+            intent.putExtra("URL", url)
+            intent.putExtra("type", type)
+            context.startActivity(intent)
         }
 
     }
