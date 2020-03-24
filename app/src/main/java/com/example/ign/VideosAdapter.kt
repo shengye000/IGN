@@ -5,12 +5,14 @@ import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ign.api.IGNVideos
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class VideosAdapter(private val viewModel: MainViewModel)
     : RecyclerView.Adapter<VideosAdapter.VH>() {
@@ -32,7 +34,6 @@ class VideosAdapter(private val viewModel: MainViewModel)
     inner class VH(itemView: View)
         : RecyclerView.ViewHolder(itemView){
 
-//        private var date : TextView = itemView.findViewById(R.id.articles_date)
         private var date : TextView = itemView.findViewById(R.id.videos_date)
         private var picture : ImageView = itemView.findViewById(R.id.videos_picture)
         private var button : ImageButton = itemView.findViewById(R.id.videos_button)
@@ -44,20 +45,36 @@ class VideosAdapter(private val viewModel: MainViewModel)
             if(item == null)
                 return
 
-            date.text = item.metadata.publishDate
+            val publishTimeConvert = item.metadata.publishDate.substring(0, 22) + ":" + item.metadata.publishDate.substring(22, item.metadata.publishDate.length)
+            val publishTime = OffsetDateTime.parse(publishTimeConvert, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+            val currentTime = OffsetDateTime.now()
+            val seconds = publishTime.until(currentTime, ChronoUnit.SECONDS)
+            if(seconds < 60){
+                date.text = seconds.toString() + " secs ago"
+            }
+            else if (seconds >= 60 && seconds < 3600){
+                date.text = publishTime.until(currentTime, ChronoUnit.MINUTES).toString() + " mins ago"
+            }
+            else if (seconds >= 3600 && seconds <= 86400){
+                date.text = publishTime.until(currentTime, ChronoUnit.HOURS).toString() + " hours ago"
+            }
+            else{
+                date.text = publishTime.until(currentTime, ChronoUnit.DAYS).toString() + " days ago"
+            }
+
 
             Glide.glideFetch(item.thumbnails[2].url, item.thumbnails[0].url, picture)
             picture.setOnClickListener {
                 val context = itemView.context
                 val intent = Intent(context, WebsiteView::class.java)
-                intent.putExtra("URL", item.assets[item.assets.size - 1].url)
+                intent.putExtra("URL", "https://www.ign.com/videos/" + item.metadata.slug)
                 context.startActivity(intent)
             }
 
             button.setOnClickListener {
                 val context = itemView.context
                 val intent = Intent(context, WebsiteView::class.java)
-                intent.putExtra("URL", item.assets[item.assets.size - 1].url)
+                intent.putExtra("URL", "https://www.ign.com/videos/" + item.metadata.slug)
                 context.startActivity(intent)
             }
 
@@ -65,11 +82,11 @@ class VideosAdapter(private val viewModel: MainViewModel)
             title.setOnClickListener {
                 val context = itemView.context
                 val intent = Intent(context, WebsiteView::class.java)
-                intent.putExtra("URL", item.assets[item.assets.size - 1].url)
+                intent.putExtra("URL", "https://www.ign.com/videos/" + item.metadata.slug)
                 context.startActivity(intent)
             }
 
-            game.text = item.metadata.videoSeries
+            game.text = item.metadata.videoSeries.toUpperCase()
             if(item.metadata.videoSeries != "none"){
                 game.paintFlags = Paint.UNDERLINE_TEXT_FLAG
                 game.setOnClickListener {

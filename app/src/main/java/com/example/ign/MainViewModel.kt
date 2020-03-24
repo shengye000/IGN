@@ -4,10 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ign.api.IGNApi
-import com.example.ign.api.IGNArticles
-import com.example.ign.api.IGNPostRepository
-import com.example.ign.api.IGNVideos
+import com.example.ign.api.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -15,8 +12,10 @@ class MainViewModel : ViewModel() {
 
     private var articlesPost = MutableLiveData<List<IGNArticles>>()
     private var videosPost = MutableLiveData<List<IGNVideos>>()
-    private var startIndex = 30
-    private var count = 5
+    private var articlesComment = MutableLiveData<List<IGNComments>>()
+    private var videosComment = MutableLiveData<List<IGNComments>>()
+    private var startIndex = 30 //30
+    private var count = 5  //5
 
     private val ignApi = IGNApi.create()
     private val ignRepository = IGNPostRepository(ignApi)
@@ -41,5 +40,14 @@ class MainViewModel : ViewModel() {
         return videosPost
     }
 
+    fun netFetchArticleCommentsPost(ids: String) = viewModelScope.launch(
+        context = viewModelScope.coroutineContext + Dispatchers.IO
+    ){
+        articlesComment.postValue(ignRepository.getComments(ids))
+    }
+
+    fun observeArticleCommentsPost(): LiveData<List<IGNComments>> {
+        return articlesComment
+    }
 
 }

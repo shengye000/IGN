@@ -21,15 +21,14 @@ interface IGNApi {
     suspend fun getVideosResponse(@Query("startIndex") start: Int,
                                     @Query("count") count: Int): ListingResponseVideos
 
+    @GET("/comments")
+    suspend fun getCommentsResponse(@Query("ids") ids: String): ListingResponseComments
+
     class ListingResponseArticles(
         val count: Int,
         val startIndex: Int,
         val data: List<IGNArticles>
     )
-
-//    data class ListingDataArticles(
-//        val IGNListArticles: IGNArticles
-//    )
 
     class ListingResponseVideos(
         val count: Int,
@@ -37,9 +36,10 @@ interface IGNApi {
         val data: List<IGNVideos>
     )
 
-//    data class ListingDataVideos(
-//        val IGNListVideos: IGNVideos
-//    )
+    class ListingResponseComments(
+        val count: Int,
+        val content: List<IGNComments>
+    )
 
     companion object {
         private fun buildGsonConverterFactory(): GsonConverterFactory {

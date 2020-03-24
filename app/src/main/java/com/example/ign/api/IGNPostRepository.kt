@@ -22,11 +22,24 @@ class IGNPostRepository(private val api : IGNApi){
         return list
     }
 
+    fun unpackCommentsPosts(response: IGNApi.ListingResponseComments): List<IGNComments>? {
+        val list = mutableListOf<IGNComments>()
+        for(i in 0 until (response.count)){
+            list.add(response.content[i])
+            //Log.d("test", "Index " + i + " "  + list[i].toString())
+        }
+        return list
+    }
+
     suspend fun getArticles(start: Int, count: Int): List<IGNArticles>? {
         return unpackArticlesPosts(api.getArticlesResponse(start, count))
     }
 
     suspend fun getVideos(start: Int, count: Int): List<IGNVideos>? {
         return unpackVideosPosts(api.getVideosResponse(start, count))
+    }
+
+    suspend fun getComments(ids: String) : List<IGNComments>? {
+        return unpackCommentsPosts(api.getCommentsResponse(ids))
     }
 }

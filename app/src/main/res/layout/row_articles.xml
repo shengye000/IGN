@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:padding="6dp"
+            android:textColor="@color/red"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/statsLayout"
             />
@@ -89,6 +90,7 @@
                     android:id="@+id/articles_game"
                     android:padding="6dp"
                     android:textColor="@color/red"
+                    android:textStyle="bold"
                     android:scrollbars = "vertical"
                     />
                 <ImageView
