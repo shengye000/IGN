@@ -14,8 +14,8 @@ class MainViewModel : ViewModel() {
     private var videosPost = MutableLiveData<List<IGNVideos>>()
     private var articlesComment = MutableLiveData<List<IGNComments>>()
     private var videosComment = MutableLiveData<List<IGNComments>>()
-    private var startIndex = 30 //30
-    private var count = 5  //5
+    private var startIndex = 0 //30
+    private var count = 10  //5
 
     private val ignApi = IGNApi.create()
     private val ignRepository = IGNPostRepository(ignApi)
@@ -50,4 +50,13 @@ class MainViewModel : ViewModel() {
         return articlesComment
     }
 
+    fun netFetchVideoCommentsPost(ids: String) = viewModelScope.launch(
+        context = viewModelScope.coroutineContext + Dispatchers.IO
+    ){
+        videosComment.postValue(ignRepository.getComments(ids))
+    }
+
+    fun observeVideoCommentsPost(): LiveData<List<IGNComments>> {
+        return videosComment
+    }
 }

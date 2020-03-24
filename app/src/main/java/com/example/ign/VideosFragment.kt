@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ign.api.IGNComments
 import kotlinx.android.synthetic.main.fragment_videos.*
 
 /**
@@ -36,10 +37,26 @@ class VideosFragment : Fragment() {
         rv.layoutManager = LinearLayoutManager(context)
 
         viewModel.netFetchVideosPost()
-        viewModel.observeVideosPost().observe(this, Observer{
-            subAdapter.submitList(it)
+        viewModel.observeVideosPost().observe(this, Observer { it ->
+            val commentList = mutableListOf<String>()
+            for (i in 0 until (it.size)) {
+                commentList.add(it[i].contentID)
+            }
+            viewModel.netFetchVideoCommentsPost(commentList.joinToString().replace(" ", ""))
+            viewModel.observeVideoCommentsPost().observe(this, Observer { it2 ->
+                val realList = mutableListOf<IGNComments>()
+                for (i in 0 until (it.size)) {
+                    for (j in 0 until (it2.size)) {
+                        if (it[i].contentID == it2[j].id) {
+                            realList.add(i, it2[j])
+                            break
+                        }
+                    }
+                }
+                subAdapter.submitList(it)
+                subAdapter.submitComments(realList)
+            })
         })
-
         return root
     }
 

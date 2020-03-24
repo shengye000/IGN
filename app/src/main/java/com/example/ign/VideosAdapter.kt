@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ign.api.IGNComments
 import com.example.ign.api.IGNVideos
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
@@ -18,6 +19,7 @@ class VideosAdapter(private val viewModel: MainViewModel)
     : RecyclerView.Adapter<VideosAdapter.VH>() {
 
     private var posts = listOf<IGNVideos>()
+    private var comments = listOf<IGNComments>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideosAdapter.VH {
         val itemView = LayoutInflater.from(parent.context)
@@ -26,7 +28,7 @@ class VideosAdapter(private val viewModel: MainViewModel)
     }
 
     override fun onBindViewHolder(holder: VideosAdapter.VH, position: Int) {
-        holder.bind(posts[holder.adapterPosition])
+        holder.bind(posts[holder.adapterPosition], comments[holder.adapterPosition])
     }
 
     override fun getItemCount() = posts.size
@@ -41,7 +43,7 @@ class VideosAdapter(private val viewModel: MainViewModel)
         private var game : TextView = itemView.findViewById(R.id.videos_game)
         private var comment: TextView = itemView.findViewById(R.id.videos_comment_count)
 
-        fun bind(item: IGNVideos?) {
+        fun bind(item: IGNVideos?, commentCount: IGNComments?) {
             if(item == null)
                 return
 
@@ -99,13 +101,19 @@ class VideosAdapter(private val viewModel: MainViewModel)
             else{
                 game.text = ""
             }
-            comment.text = "???"
+
+            comment.text = commentCount!!.count.toString()
         }
 
     }
 
     fun submitList(items: List<IGNVideos>) {
         posts = items
+        notifyDataSetChanged()
+    }
+
+    fun submitComments(items: List<IGNComments>){
+        comments = items
         notifyDataSetChanged()
     }
 }

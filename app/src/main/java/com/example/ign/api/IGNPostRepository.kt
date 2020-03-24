@@ -1,10 +1,8 @@
 package com.example.ign.api
 
-import com.google.gson.Gson
-
 class IGNPostRepository(private val api : IGNApi){
 
-    fun unpackArticlesPosts(response: IGNApi.ListingResponseArticles): List<IGNArticles>? {
+    private fun unpackArticlesPosts(response: IGNApi.ListingResponseArticles): List<IGNArticles>? {
         val list = mutableListOf<IGNArticles>()
         for(i in 0 until (response.data.size)){
             list.add(response.data[i])
@@ -13,7 +11,7 @@ class IGNPostRepository(private val api : IGNApi){
         return list
     }
 
-    fun unpackVideosPosts(response: IGNApi.ListingResponseVideos): List<IGNVideos>? {
+    private fun unpackVideosPosts(response: IGNApi.ListingResponseVideos): List<IGNVideos>? {
         val list = mutableListOf<IGNVideos>()
         for(i in 0 until (response.data.size)){
             list.add(response.data[i])
@@ -22,7 +20,7 @@ class IGNPostRepository(private val api : IGNApi){
         return list
     }
 
-    fun unpackCommentsPosts(response: IGNApi.ListingResponseComments): List<IGNComments>? {
+    private fun unpackCommentsPosts(response: IGNApi.ListingResponseComments): List<IGNComments>? {
         val list = mutableListOf<IGNComments>()
         for(i in 0 until (response.count)){
             list.add(response.content[i])
